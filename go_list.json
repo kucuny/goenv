@@ -1,0 +1,107 @@
+{
+  "latest": "1.6",
+  "1.6": [{
+    "source": {
+        "filename": "",
+        "url": "",
+        "checksum": ""
+    },
+    "archive": [
+      {
+        "osx": [
+          {
+            "64-bit": {
+              "filename": "",
+              "url": "",
+              "checksum": ""
+            }
+          }
+        ],
+        "freebsd": [
+          {
+            "32-bit": {
+              "filename": "",
+              "url": "",
+              "checksum": ""
+            }
+          },
+          {
+            "64-bit": {
+              "filename": "",
+              "url": "",
+              "checksum": ""
+            }
+          }
+        ],
+        "linux": [
+          {
+            "32-bit": {
+              "filename": "",
+              "url": "",
+              "checksum": ""
+            }
+          },
+          {
+            "64-bit": {
+              "filename": "",
+              "url": "",
+              "checksum": ""
+            }
+          },
+          {
+            "armv6": {
+              "filename": "",
+              "url": "",
+              "checksum": ""
+            }
+          }
+        ],
+        "windows": [
+          {
+            "32-bit": {
+              "filename": "",
+              "url": "",
+              "checksum": ""
+            }
+          },
+          {
+            "64-bit": {
+              "filename": "",
+              "url": "",
+              "checksum": ""
+            }
+          }
+        ]
+      }
+    ],
+    "installer": [
+      {
+        "osx": [
+          {
+            "64-bit": {
+              "filename": "",
+              "url": "",
+              "checksum": ""
+            }
+          }
+        ],
+        "windows": [
+          {
+            "32-bit": {
+              "filename": "",
+              "url": "",
+              "checksum": ""
+            }
+          },
+          {
+            "64-bit": {
+              "filename": "",
+              "url": "",
+              "checksum": ""
+            }
+          }
+        ]
+      }
+    ]
+  }]
+}
