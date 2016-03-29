@@ -1,9 +1,11 @@
-package goinstall
+package install
 
 import (
 	"fmt"
 	"golang.org/x/net/html"
 	"net/http"
+	"regexp"
+	"strings"
 )
 
 const GolangInstallPackageURL = "https://golang.org/dl/"
@@ -11,6 +13,7 @@ const GolangInstallPackageURL = "https://golang.org/dl/"
 type GolangListParser struct {}
 
 type GoVersion struct {
+	version      string
 	fileName     string
 	kind         string
 	os           string
@@ -21,11 +24,27 @@ type GoVersion struct {
 	checksum     string
 }
 
+type GoVersionList struct {
+	Latest string
+	Version string
+
+}
+
+type GoVersionDetail struct {
+
+}
+
 func NewGoVersion() *GolangListParser {
 	return &GolangListParser{}
 }
 
-func (gv *GolangListParser) GetGoVersionListFromGolangOrg() []GoVersion {
+func (gv *GolangListParser) CreateGoVersionListFile() {
+	goVersionList := gv.getGoVersionListFromGolangOrg()
+
+	fmt.Println(goVersionList)
+}
+
+func (gv *GolangListParser) getGoVersionListFromGolangOrg() []GoVersion {
 	resp, err := http.Get(GolangInstallPackageURL)
 
 	if err != nil {
@@ -63,8 +82,11 @@ func (gv *GolangListParser) GetGoVersionListFromGolangOrg() []GoVersion {
 				z.Next()
 				token = z.Token()
 
-				// Go installer filename
+				// Go installer filename and version
 				goVersion.fileName = token.String()
+				verReg := regexp.MustCompile(`go(\d+\.\d+(?:\.\d+)?)\.(\S+)\.(tar\.gz|pkg|zip|msi)`)
+				versionInfo := verReg.FindStringSubmatch(goVersion.fileName)
+				goVersion.version = versionInfo[1]
 
 				var i int = 0
 				for {
@@ -83,10 +105,10 @@ func (gv *GolangListParser) GetGoVersionListFromGolangOrg() []GoVersion {
 							if tokenType == html.TextToken {
 								// Kind, OS, Arch, Size
 								switch i {
-								case 1: goVersion.kind = token.String()
-								case 2: goVersion.os = token.String()
-								case 3: goVersion.arch = token.String()
-								case 4: goVersion.size = token.String()
+								case 1: goVersion.kind = strings.ToLower(token.String())
+								case 2: goVersion.os = strings.ToLower(token.String())
+								case 3: goVersion.arch = strings.ToLower(token.String())
+								case 4: goVersion.size = strings.ToLower(token.String())
 								}
 							} else if tokenType == html.EndTagToken {
 								// Kind, OS, Arch, Size
@@ -102,6 +124,13 @@ func (gv *GolangListParser) GetGoVersionListFromGolangOrg() []GoVersion {
 									token = z.Token()
 									// Go installation file's checksum and type
 									goVersion.checksum = token.String()
+
+									if len(goVersion.checksum) == 40 {
+										goVersion.checksumType = "sha1"
+									} else {
+										goVersion.checksumType = "sha256"
+									}
+
 									isEnd = true
 								}
 							}
